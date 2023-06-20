@@ -6,7 +6,7 @@ pool:
 
 variables:
   subscription: 1a317aed-2ae0-467e-a97d-46ea4e51f919
-  resourceGroup: resourcegroup-tfstate
+  resourceGroup:  rg-sucharita
   storageAccount: terraformtfstateskip2
   container: terraformtfstate
   tfstateFile: terraform.tfstate
@@ -15,11 +15,9 @@ variables:
 steps:
 
 - task: TerraformInstaller@0
-- task: TerraformInstaller@0
-  inputs:
-    terraformVersion: 'latest'
   displayName: install Terraform v0.12.28
-  
+  inputs:
+    terraformVersion: '0.12.28'
 
 - task: TerraformTaskV1@0
   displayName: terraform init
