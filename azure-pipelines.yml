@@ -18,28 +18,23 @@ steps:
   displayName: install Terraform v0.12.28
   inputs:
     terraformVersion: '0.12.28'
-
-- task: TerraformTaskV1@0
-  displayName: terraform init
+- task: TerraformCLI@0
   inputs:
-    provider: 'azurerm'
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    backendServiceArm: '$(subscription)'
-    backendAzureRmResourceGroupName: '$(resourceGroup)'
-    backendAzureRmStorageAccountName: '$(storageAccount)'
-    backendAzureRmContainerName: '$(container)'
-    backendAzureRmKey: '$(tfstateFile)'
-
-- task: TerraformTaskV1@0
-  displayName: terraform plan -out=tfplan
+    backendType: 'azurerm'
+    backendServiceArm: 'Microsoft Azure (imcloudoperations): #1265675(1)(1a317aed-2ae0-467e-a97d-46ea4e51f919)'
+    backendAzureRmSubscriptionId: '1a317aed-2ae0-467e-a97d-46ea4e51f919'
+    backendAzureRmResourceGroupName: 'rg-sucharita'
+    backendAzureRmStorageAccountName: 'terraformtfstateskip2'
+    backendAzureRmContainerName: 'terraformtfstate'
+    backendAzureRmKey: 'terraform.tfstate'
+    allowTelemetryCollection: false
+- task: TerraformCLI@0
   inputs:
-    provider: 'azurerm'
     command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    commandOptions: '-out=tfplan'
-    # commandOptions: '-detailed-exitcode -out=tfplan'
-    environmentServiceNameAzureRM: '$(subscription)'
+    environmentServiceName: 'Microsoft Azure (imcloudoperations): #1265675(2)(1a317aed-2ae0-467e-a97d-46ea4e51f919)'
+    providerAzureRmSubscriptionId: '1a317aed-2ae0-467e-a97d-46ea4e51f919'
+    allowTelemetryCollection: true
 
 - task: PowerShell@2
   displayName: detect any terraform change
@@ -60,13 +55,9 @@ steps:
       {
         Write-Host "There is no change detected in Terraform tfplan file"
       }
-
-- task: TerraformTaskV1@0
-  displayName: terraform apply tfplan
-  condition: eq(variables.anyTfChanges, true)
+- task: TerraformCLI@0
   inputs:
-    provider: 'azurerm'
     command: 'apply'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    commandOptions: 'tfplan'
-    environmentServiceNameAzureRM: '$(subscription)'
+    environmentServiceName: 'Microsoft Azure (imcloudoperations): #1265675(1)(1a317aed-2ae0-467e-a97d-46ea4e51f919)'
+    providerAzureRmSubscriptionId: '1a317aed-2ae0-467e-a97d-46ea4e51f919'
+    allowTelemetryCollection: true
